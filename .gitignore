@@ -3,3 +3,5 @@ db.sqlite
 venv
 .vscode
 __pycache__
+
+recipients.txt

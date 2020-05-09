@@ -38,7 +38,6 @@ def add_to_db(date, cases, healthy, delta):
 
 def get_last_stat():
     last = session.query(DailyStat).order_by(DailyStat.id.desc()).first()
-    if last == None:
+    if last is None:
         return DailyStats("", "", "", "")
     return DailyStats(last.date, last.cases, last.healthy, last.delta)
-

@@ -1,32 +1,36 @@
 import configparser
+from email.message import EmailMessage
+import os
 import smtplib
 
 config = configparser.ConfigParser()
 config.read("config.ini")
 SMTP_CONFIG = config["SMTP"]
 
-# change to context manager
 
+def send_email(to_addr, subject, content, debug=True):
+    if not all([x in os.environ for x in ["SMTP_LOGIN", "SMTP_PASS", "SMTP_FROM"]]):
+        raise KeyError("missing environmental variables needed for SMTP!")
 
-def send_email(from_addr, to_addr, content, debug=True):
-    if debug:
-        try:
-            server = smtplib.SMTP(SMTP_CONFIG["DEBUG_SERVER"], SMTP_CONFIG["DEBUG_PORT"])
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = os.environ.get("SMTP_FROM")
+    msg["To"] = to_addr
+    msg.set_content(content)
+
+    try:
+        if debug:
+            server = smtplib.SMTP(
+                SMTP_CONFIG["DEBUG_SERVER"], SMTP_CONFIG["DEBUG_PORT"]
+            )
             server.set_debuglevel(1)
-            server.sendmail(from_addr, to_addr, content)
-        except:
-            print('Something went wrong...')
-        finally:
-            server.close()
-    else:
-        try:
+            server.send_message(msg)
+        else:
             server = smtplib.SMTP_SSL(SMTP_CONFIG["SERVER"], SMTP_CONFIG["PORT"])
             server.ehlo()
-            server.login("x", "x")
-            server.sendmail(from_addr, to_addr, content)
-        except Exception as e:
-            print(f'Something went wrong... {e}')
-        finally:
-            server.close()
-    
-    
+            server.login(os.environ.get("SMTP_LOGIN"), os.environ.get("SMTP_PASS"))
+            server.send_message(msg)
+    except Exception as e:
+        print(e)
+    finally:
+        server.close()

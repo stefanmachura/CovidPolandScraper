@@ -4,8 +4,14 @@ import configparser
 from bs4 import BeautifulSoup
 import requests
 
+DailyStats = namedtuple("DailyStats", ["date", "cases", "healthy", "delta"])
+
 
 def scrape_latest_data():
+    """
+    read latest data from "Covic-19 w Polsce" Google Sheet
+    returns a namedtuple with the most current statistics
+    """
     config = configparser.ConfigParser()
     config.read("config.ini")
 
@@ -22,7 +28,4 @@ def scrape_latest_data():
             healthy = cells[int(config["GSHEETDATA"]["RECOVERED_COLUMN"])].text
             delta = cells[int(config["GSHEETDATA"]["DELTA_COLUMN"])].text
             if cases.isdigit() or healthy.isdigit() or delta.isdigit():
-                DailyStats = namedtuple(
-                    "DailyStats", ["date", "cases", "healthy", "delta"]
-                )
                 return DailyStats(date, cases, healthy, delta)

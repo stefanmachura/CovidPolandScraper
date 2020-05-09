@@ -18,7 +18,7 @@ if not newest_scraped == newest_from_db:
     Delta: {newest_scraped.delta}
     Cases:{newest_scraped.cases}
     """
-    mail.send_email(from_addr="info", to_addr="receiver", content=content)
+    mail.send_email(from_addr="", to_addr="", content=content, debug=False)
     db.add_to_db(newest_scraped.date, newest_scraped.cases, newest_scraped.healthy, newest_scraped.delta)
 else:
     print("no changes!")

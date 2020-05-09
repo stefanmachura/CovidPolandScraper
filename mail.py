@@ -3,9 +3,13 @@ from email.message import EmailMessage
 import os
 import smtplib
 
+import log
+
 config = configparser.ConfigParser()
 config.read("config.ini")
 SMTP_CONFIG = config["SMTP"]
+
+log = log.Log()
 
 
 def send_email(to_addr, subject, content, debug=True):
@@ -31,6 +35,6 @@ def send_email(to_addr, subject, content, debug=True):
             server.login(os.environ.get("SMTP_LOGIN"), os.environ.get("SMTP_PASS"))
             server.send_message(msg)
     except Exception as e:
-        print(e)
+        log.add(e)
     finally:
         server.close()

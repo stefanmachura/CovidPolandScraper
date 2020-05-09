@@ -22,6 +22,7 @@ def scrape_latest_data():
             healthy = cells[int(config["GSHEETDATA"]["RECOVERED_COLUMN"])].text
             delta = cells[int(config["GSHEETDATA"]["DELTA_COLUMN"])].text
             if cases.isdigit() or healthy.isdigit() or delta.isdigit():
-                DailyStats = namedtuple("DailyStats", ["date", "cases", "healthy", "delta"])
+                DailyStats = namedtuple(
+                    "DailyStats", ["date", "cases", "healthy", "delta"]
+                )
                 return DailyStats(date, cases, healthy, delta)
-

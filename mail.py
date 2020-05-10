@@ -2,11 +2,12 @@ import configparser
 from email.message import EmailMessage
 import os
 import smtplib
+import sys
 
 import log
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(os.path.join(sys.path[0], "config.ini"))
 SMTP_CONFIG = config["SMTP"]
 
 log = log.Log()
@@ -14,6 +15,7 @@ log = log.Log()
 
 def send_email(to_addr, subject, content, debug=True):
     if not all([x in os.environ for x in ["SMTP_LOGIN", "SMTP_PASS", "SMTP_FROM"]]):
+        log.add("env variables missing")
         raise KeyError("missing environmental variables needed for SMTP!")
 
     msg = EmailMessage()

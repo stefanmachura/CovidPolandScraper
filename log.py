@@ -1,7 +1,8 @@
 from datetime import datetime
 import os
+import sys
 
-LOG_F_NAME = "log.txt"
+LOG_F_NAME = os.path.join(sys.path[0], "log.txt")
 
 
 class Log:

@@ -1,5 +1,7 @@
 import configparser
+import os
 import sqlalchemy
+import sys
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
@@ -7,7 +9,7 @@ from sqlalchemy import Column, Integer, String
 from scraping import DailyStats
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(os.path.join(sys.path[0], "./config.ini"))
 url = "sqlite:///" + config["DB"]["DB_FILENAME"]
 
 Base = declarative_base()

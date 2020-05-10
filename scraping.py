@@ -1,5 +1,7 @@
 from collections import namedtuple
 import configparser
+import os
+import sys
 
 from bs4 import BeautifulSoup
 import requests
@@ -13,7 +15,7 @@ def scrape_latest_data():
     returns a namedtuple with the most current statistics
     """
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    config.read(os.path.join(sys.path[0], "config.ini"))
 
     google_sheets = requests.get(config["GSHEETDATA"]["GSHEET_URL"])
     covid_data = BeautifulSoup(google_sheets.text, "html.parser")

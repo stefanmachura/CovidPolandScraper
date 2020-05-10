@@ -2,12 +2,14 @@ import configparser
 import db
 import log
 import mail
+import os
 import scraping
+import sys
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(os.path.join(sys.path[0], "config.ini"))
 
-with open("recipients.txt", "r") as recip_file:
+with open(os.path.join(sys.path[0], "recipients.txt"), "r") as recip_file:
     recipients = recip_file.readlines()
 
 log = log.Log()
